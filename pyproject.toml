@@ -1,0 +1,37 @@
+[project]
+name = "brazil-data-mcp"
+version = "0.1.0"
+description = "MCP server that gives LLM agents access to Brazilian public data (Banco Central, BrasilAPI)"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Mirela Schneider Bianchi" }]
+dependencies = [
+    "mcp[cli]>=2.0",
+    "httpx>=0.27",
+]
+
+[project.scripts]
+brazil-data-mcp = "brazil_data_mcp.server:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "respx>=0.21",
+    "ruff>=0.6",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/brazil_data_mcp"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+
+[tool.ruff]
+line-length = 100
