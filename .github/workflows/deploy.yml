@@ -1,0 +1,53 @@
+name: Deploy to AWS
+
+# Pushes the image to ECR; App Runner redeploys automatically on a new :latest.
+# Enabled once the AWS_ROLE_ARN repository variable is set (see infra/README.md).
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: >-
+      vars.AWS_ROLE_ARN != '' &&
+      (github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success')
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION || 'us-east-1' }}
+
+      - id: ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push image
+        env:
+          IMAGE: ${{ steps.ecr.outputs.registry }}/brazil-data-mcp
+        run: |
+          docker build -t "$IMAGE:${{ github.sha }}" -t "$IMAGE:latest" .
+          docker push --all-tags "$IMAGE"
+
+      - name: Show the endpoint
+        run: |
+          URL=$(aws apprunner list-services \
+            --query "ServiceSummaryList[?ServiceName=='brazil-data-mcp'].ServiceUrl | [0]" --output text)
+          if [ "$URL" != "None" ]; then
+            echo "App Runner is rolling out the new image: https://$URL/mcp" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Image pushed. Create the service with terraform apply (see infra/README.md)." >> "$GITHUB_STEP_SUMMARY"
+          fi
