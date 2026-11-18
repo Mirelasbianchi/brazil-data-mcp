@@ -17,8 +17,8 @@ from contextlib import ExitStack
 from mcp import Client
 from rich.console import Console
 from rich.panel import Panel
-from rich.syntax import Syntax
 from rich.table import Table
+from rich.terminal_theme import MONOKAI
 
 console = Console(width=104, record=True)
 
@@ -66,8 +66,8 @@ async def run(target) -> None:
         console.print()
         for question, name, args in STEPS:
             console.print(f"[bold]> {question}[/bold]")
-            console.print(Syntax(f"{name}({json.dumps(args, ensure_ascii=False)})", "python",
-                                 theme="ansi_dark", background_color="default"))
+            call = json.dumps(args, ensure_ascii=False).replace("[", r"\[")
+            console.print(f"  [dim]tool call[/dim] [cyan]{name}[/cyan]({call})")
             result = await client.call_tool(name, args)
             text = result.content[0].text if result.content else ""
             if result.is_error:
@@ -96,7 +96,7 @@ def main() -> None:
             stack.enter_context(recorded_apis())
         asyncio.run(run(args.url or mcp))
     if args.html:
-        console.save_html(args.html, inline_styles=True)
+        console.save_html(args.html, inline_styles=True, theme=MONOKAI)
 
 
 if __name__ == "__main__":
