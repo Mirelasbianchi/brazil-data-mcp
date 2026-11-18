@@ -11,6 +11,33 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
-      - run: uv sync
+      - run: uv sync --all-groups
       - run: uv run ruff check .
       - run: uv run pytest
+      - name: Demo against recorded responses
+        run: uv run --all-groups python examples/demo.py --replay
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t brazil-data-mcp .
+      - name: Smoke test the HTTP transport
+        run: |
+          docker run -d -p 8000:8000 --name mcp brazil-data-mcp
+          timeout 60 bash -c 'until curl -sf localhost:8000/health; do sleep 1; done'
+          curl -sf localhost:8000/mcp -H 'content-type: application/json' \
+            -H 'accept: application/json, text/event-stream' \
+            -d '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}' | grep -q get_selic_rate
+
+  terraform:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: infra/terraform
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+      - run: terraform init -backend=false
+      - run: terraform validate
