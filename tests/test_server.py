@@ -110,6 +110,7 @@ async def test_responses_are_cached():
     route = respx.get(f"{BRASILAPI}/feriados/v1/2026").mock(
         return_value=httpx.Response(200, json=fixture("holidays"))
     )
-    await server.list_national_holidays(2026)
+    first = await server.list_national_holidays(2026)
     await server.list_national_holidays(2026)
     assert route.call_count == 1
+    assert first["count"] == 14

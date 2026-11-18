@@ -80,7 +80,7 @@ async def get_company_by_cnpj(cnpj: str) -> dict:
 
 
 @mcp.tool(annotations=READ_ONLY)
-async def list_national_holidays(year: int) -> list:
+async def list_national_holidays(year: int) -> dict:
     """List Brazilian national holidays for a year, with date, name and weekday.
 
     Args:
@@ -88,7 +88,8 @@ async def list_national_holidays(year: int) -> list:
     """
     if not 1900 <= year <= 2199:
         raise ToolError("year must be between 1900 and 2199")
-    return await _call(clients.brasilapi(f"/feriados/v1/{year}"))
+    holidays = await _call(clients.brasilapi(f"/feriados/v1/{year}"))
+    return {"year": year, "count": len(holidays), "holidays": holidays}
 
 
 @mcp.tool(annotations=READ_ONLY)
