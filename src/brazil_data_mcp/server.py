@@ -3,6 +3,7 @@
 import argparse
 import math
 from datetime import date, datetime, timedelta
+from typing import Any
 
 from mcp.server.mcpserver import MCPServer
 from mcp.server.mcpserver.exceptions import ToolError
@@ -51,7 +52,7 @@ def _parse_bcb_date(text: str) -> date:
 
 
 @mcp.tool(annotations=READ_ONLY)
-async def get_address_by_cep(cep: str) -> dict:
+async def get_address_by_cep(cep: str) -> dict[str, Any]:
     """Return the address (street, neighborhood, city, state, coordinates) for a Brazilian CEP.
 
     Args:
@@ -62,7 +63,7 @@ async def get_address_by_cep(cep: str) -> dict:
 
 
 @mcp.tool(annotations=READ_ONLY)
-async def get_company_by_cnpj(cnpj: str) -> dict:
+async def get_company_by_cnpj(cnpj: str) -> dict[str, Any]:
     """Return public registration data for a Brazilian company: legal name, trade name, status,
     main activity (CNAE), address and opening date, from the Receita Federal registry.
 
@@ -80,7 +81,7 @@ async def get_company_by_cnpj(cnpj: str) -> dict:
 
 
 @mcp.tool(annotations=READ_ONLY)
-async def list_national_holidays(year: int) -> dict:
+async def list_national_holidays(year: int) -> dict[str, Any]:
     """List Brazilian national holidays for a year, with date, name and weekday.
 
     Args:
@@ -93,7 +94,7 @@ async def list_national_holidays(year: int) -> dict:
 
 
 @mcp.tool(annotations=READ_ONLY)
-async def get_bank(code: int) -> dict:
+async def get_bank(code: int) -> dict[str, Any]:
     """Return details of a Brazilian bank by its COMPE code (e.g. 260 for Nubank, 1 for Banco do
     Brasil, 341 for Itaú).
 
@@ -104,7 +105,7 @@ async def get_bank(code: int) -> dict:
 
 
 @mcp.tool(annotations=READ_ONLY)
-async def get_ddd(ddd: str) -> dict:
+async def get_ddd(ddd: str) -> dict[str, Any]:
     """Return the state and the cities served by a Brazilian telephone area code (DDD).
 
     Args:
@@ -117,7 +118,7 @@ async def get_ddd(ddd: str) -> dict:
 
 
 @mcp.tool(annotations=READ_ONLY)
-async def list_municipalities(uf: str) -> dict:
+async def list_municipalities(uf: str) -> dict[str, Any]:
     """List the municipalities of a Brazilian state with their IBGE codes.
 
     Args:
@@ -130,7 +131,7 @@ async def list_municipalities(uf: str) -> dict:
 
 
 @mcp.tool(annotations=READ_ONLY)
-async def get_selic_rate(days: int = 1) -> dict:
+async def get_selic_rate(days: int = 1) -> dict[str, Any]:
     """Return the Selic target rate (% per year) set by Copom, as of today, from Banco Central.
 
     Args:
@@ -152,7 +153,7 @@ async def get_selic_rate(days: int = 1) -> dict:
 
 
 @mcp.tool(annotations=READ_ONLY)
-async def get_ipca(months: int = 12) -> dict:
+async def get_ipca(months: int = 12) -> dict[str, Any]:
     """Return monthly IPCA inflation (% per month) and the accumulated rate over those months.
 
     Args:
@@ -181,7 +182,7 @@ async def get_ipca(months: int = 12) -> dict:
 
 
 @mcp.tool(annotations=READ_ONLY)
-async def get_ptax_rate(day: str | None = None) -> dict:
+async def get_ptax_rate(day: str | None = None) -> dict[str, Any]:
     """Return the official PTAX USD/BRL buy and sell rates for a day.
 
     On weekends and holidays there is no PTAX; the most recent previous quote is returned and
