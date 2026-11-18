@@ -1,6 +1,6 @@
 [project]
 name = "brazil-data-mcp"
-version = "0.1.0"
+version = "0.2.0"
 description = "MCP server that gives LLM agents access to Brazilian public data (Banco Central, BrasilAPI)"
 readme = "README.md"
 requires-python = ">=3.11"

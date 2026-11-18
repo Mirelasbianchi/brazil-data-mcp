@@ -1,0 +1,20 @@
+{
+ "cep": "01310100",
+ "state": "SP",
+ "city": "São Paulo",
+ "neighborhood": "Bela Vista",
+ "street": "Avenida Paulista",
+ "service": "open-cep",
+ "ibge": {
+  "city": "3550308",
+  "state": "35"
+ },
+ "timezoneName": "America/Sao_Paulo",
+ "location": {
+  "type": "Point",
+  "coordinates": {
+   "longitude": "-46.6553299",
+   "latitude": "-23.5617698"
+  }
+ }
+}

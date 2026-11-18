@@ -1,0 +1,21 @@
+{
+ "ispb": "18236120",
+ "name": "NU PAGAMENTOS - IP",
+ "code": 260,
+ "fullName": "NU PAGAMENTOS S.A. - INSTITUIÇÃO DE PAGAMENTO",
+ "localizacao_sede": "Rua Capote Valente, 39, Pinheiros, São Paulo-SP",
+ "cnpj": null,
+ "headquarters_address": {
+  "street": "RUA CAPOTE VALENTE, N- 120",
+  "number": null,
+  "complement": "01- A 08- ANDAR, 09- ANDAR, CONJ 902, E 16- ANDAR",
+  "district": "PINHEIROS",
+  "city": "SÃO PAULO",
+  "state": "SP",
+  "zipCode": "05409-000"
+ },
+ "address_source": "bcb_sedes_exact_match",
+ "address_last_sync": "2026-11-18T10:31:53.982Z",
+ "address_confidence": "high",
+ "logo_url": "https://cdn.jsdelivr.net/npm/logos-bancos-br@0/logos/svg/18236120.svg"
+}
