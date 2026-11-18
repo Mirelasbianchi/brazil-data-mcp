@@ -21,6 +21,10 @@ dev = [
     "respx>=0.21",
     "ruff>=0.6",
 ]
+demo = [
+    "rich>=13.7",
+    "respx>=0.21",
+]
 
 [build-system]
 requires = ["hatchling"]
